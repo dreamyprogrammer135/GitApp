@@ -9,6 +9,7 @@ import ru.super135.gitapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val adapter: UsersAdapter = UsersAdapter()
+    private val usersRepo: UsersRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.refreshButton.setOnClickListener {
-            Toast.makeText(this,"hello!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "hello!", Toast.LENGTH_SHORT).show()
         }
 
         initRecyclerView()
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.usersRecyclerView.adapter = adapter
-        //adapter.setDate()
+        usersRepo.getUsers {
+            adapter.setDate()
+        }
     }
 }
