@@ -1,4 +1,4 @@
-package ru.super135.gitapp
+package ru.super135.gitapp.domain
 
 data class UserEntity(
     val login: String,

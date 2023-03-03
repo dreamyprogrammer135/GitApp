@@ -1,7 +1,9 @@
-package ru.super135.gitapp
+package ru.super135.gitapp.data
 
 import android.os.Handler
 import android.os.Looper
+import ru.super135.gitapp.domain.UserEntity
+import ru.super135.gitapp.domain.UsersRepo
 
 private const val DATA_LOADING_FAKE_DELAY = 2_000L
 

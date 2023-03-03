@@ -1,4 +1,6 @@
-package ru.super135.gitapp
+package ru.super135.gitapp.domain
+
+import ru.super135.gitapp.domain.UserEntity
 
 interface UsersRepo {
     // C_R_U_D

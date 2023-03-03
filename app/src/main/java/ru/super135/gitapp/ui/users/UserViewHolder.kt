@@ -1,10 +1,11 @@
-package ru.super135.gitapp
+package ru.super135.gitapp.ui.users
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import ru.super135.gitapp.R
+import ru.super135.gitapp.domain.UserEntity
 import ru.super135.gitapp.databinding.ItemUserBinding
 
 class UserViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
