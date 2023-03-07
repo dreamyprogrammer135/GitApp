@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.super135.gitapp.app
 import ru.super135.gitapp.domain.UserEntity
-import ru.super135.gitapp.domain.UsersRepo
 import ru.super135.gitapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), UsersContract.View {
@@ -22,13 +21,22 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-        presenter = UsersPresenter(app.usersRepo)
+        presenter = extractPresenter()
         presenter.attach(this)
     }
 
     override fun onDestroy() {
         presenter.detach()
         super.onDestroy()
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): UsersContract.Presenter {
+        return presenter
+
+    }
+
+    private fun extractPresenter(): UsersContract.Presenter {
+        return lastCustomNonConfigurationInstance as? UsersContract.Presenter ?: UsersPresenter(app.usersRepo)
     }
 
     private fun initView() {
@@ -38,7 +46,6 @@ class MainActivity : AppCompatActivity(), UsersContract.View {
         initRecyclerView()
         showProgress(false)
     }
-
 
 
     override fun showUsers(users: List<UserEntity>) {
