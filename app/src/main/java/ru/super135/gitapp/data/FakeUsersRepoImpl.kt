@@ -7,6 +7,14 @@ import ru.super135.gitapp.domain.UsersRepo
 
 private const val DATA_LOADING_FAKE_DELAY = 2_000L
 
+/**
+ *  ru.super135.gitapp.data
+ *
+ *
+ * @author Ilja
+ * 13.03.2023
+ */
+
 class FakeUsersRepoImpl : UsersRepo {
     private val data: List<UserEntity> = listOf(
         UserEntity("mojombo", 1, "https://avatars.githubusercontent.com/u/1?v=4"),
