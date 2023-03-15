@@ -9,54 +9,54 @@ import ru.super135.gitapp.app
 import ru.super135.gitapp.domain.UserEntity
 import ru.super135.gitapp.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), UsersContract.View {
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val adapter: UsersAdapter = UsersAdapter()
-//    private val usersRepo: UsersRepo by lazy { app.usersRepo }
-
-    private lateinit var presenter: UsersContract.Presenter
+    private val adapter = UsersAdapter()
+    private lateinit var viewModel: UsersContract.ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-        presenter = extractPresenter()
-        presenter.attach(this)
+        initViewModule()
     }
 
-    override fun onDestroy() {
-        presenter.detach()
-        super.onDestroy()
+    private fun initViewModule() {
+        viewModel = extractViewModel()
+        viewModel.progressLiveData.observe(this) { showProgress(it)}
+        viewModel.usersLiveData.observe(this) {showUsers(it)}
+        viewModel.errorLiveData.observe(this) {showError(it)}
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): UsersContract.Presenter {
-        return presenter
-
+    private fun extractViewModel(): UsersContract.ViewModel {
+        return lastCustomNonConfigurationInstance as? UsersContract.ViewModel ?: UsersViewModel(app.usersRepo)
     }
 
-    private fun extractPresenter(): UsersContract.Presenter {
-        return lastCustomNonConfigurationInstance as? UsersContract.Presenter ?: UsersPresenter(app.usersRepo)
+    override fun onRetainCustomNonConfigurationInstance(): UsersContract.ViewModel {
+        return viewModel
+
     }
 
     private fun initView() {
         binding.refreshButton.setOnClickListener {
-            presenter.onRefresh()
+            viewModel.onRefresh()
         }
         initRecyclerView()
         showProgress(false)
     }
 
 
-    override fun showUsers(users: List<UserEntity>) {
+    private fun showUsers(users: List<UserEntity>) {
         adapter.setDate(users)
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable?) {
+        if(throwable == null) return
         Toast.makeText(this, throwable.message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showProgress(inProgress: Boolean) {
+    private fun showProgress(inProgress: Boolean) {
         binding.progressBar.isVisible = inProgress
         binding.usersRecyclerView.isVisible = !inProgress
     }
